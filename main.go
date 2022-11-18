@@ -68,9 +68,9 @@ func listenForMessages(conn net.Conn) {
 			return
 		}
 		stringMessage = string(sliceMessage[:n])
-		if strings.HasPrefix(stringMessage, "%WHO") {
+		if strings.HasPrefix(stringMessage, "µWHO") {
 			log.Print(stringMessage[3:] + ": ")
-		} else if strings.HasPrefix(stringMessage, "%MSG") {
+		} else if strings.HasPrefix(stringMessage, "µMSG") {
 			log.Println(stringMessage[3:])
 		}
 	}
