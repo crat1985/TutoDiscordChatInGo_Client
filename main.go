@@ -7,27 +7,70 @@ import (
 	"net"
 	"os"
 	"strings"
+
+	"github.com/RIC217/TutoDiscordChatInGo_Client/utils"
 )
 
 var conn net.Conn
 var err error
+var address = "90.125.35.111"
+var port = "8080"
+var pseudo = ""
+var password = ""
+
+func askInfos() {
+	fmt.Print("Adresse du serveur : ")
+	fmt.Scanln(&address)
+	fmt.Print("Port : ")
+	fmt.Scanln(&port)
+	fmt.Print("Pseudo : ")
+	fmt.Scanln(&pseudo)
+	fmt.Print("Mot de passe : ")
+	fmt.Scanln(&password)
+}
 
 func sendPseudo() {
-	response := make([]byte, 1024)
-	log.Println("Connecting to 90.125.35.111:8080...")
-	conn, err = net.Dial("tcp", "90.125.35.111:8080")
-	if err != nil {
-		panic(err)
-	}
-	log.Println("Connected !")
-
 	for {
-		fmt.Print("Pseudo : ")
-		var pseudo []byte
-		fmt.Scanln(&pseudo)
-		fmt.Print("Mot de passe : ")
-		var password []byte
-		fmt.Scanln(&password)
+		config := utils.Decode()
+		address = "90.125.35.111"
+		port = "8080"
+		pseudo = ""
+		password = ""
+		var ask = true
+		if config.Pseudo != "" {
+			for {
+				fmt.Print("Se connecter avec les infos enregistrées (o pour oui, n pour non et ? pour plus d'infos) ? ")
+				var response string
+				fmt.Scanln(&response)
+				response = strings.ToLower(response)
+				if response == "o" {
+					address = config.Host
+					port = config.Port
+					pseudo = config.Pseudo
+					password = config.Password
+					ask = false
+					break
+				}
+				if response == "?" {
+					config.PrintInfos()
+					continue
+				}
+				if response == "n" {
+					break
+				}
+			}
+		}
+		if ask {
+			askInfos()
+		}
+		response := make([]byte, 1024)
+		log.Printf("Connecting to %s:%s...\n", address, port)
+		conn, err = net.Dial("tcp", address+":"+port)
+		if err != nil {
+			log.Print(err)
+			continue
+		}
+		log.Println("Connected !")
 		conn.Write([]byte(string(pseudo) + "\n" + string(password)))
 		n, err := conn.Read(response)
 		if err != nil {
@@ -39,9 +82,7 @@ func sendPseudo() {
 			continue
 		}
 		log.Println("Bienvenue sur le chat !")
-		break
 	}
-
 }
 
 func main() {
