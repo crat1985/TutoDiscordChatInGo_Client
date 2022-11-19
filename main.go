@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"log"
 	"net"
+	"os"
 	"strings"
 )
 
@@ -46,13 +48,24 @@ func main() {
 }
 
 func sendMessage(conn net.Conn) {
-	var slice []byte
+	// for {
+	// 	fmt.Println("Entre ton message :")
+	// 	_, err := fmt.Scanln(&slice)
+	// 	if err != nil {
+	// 		// log.Print(err)
+	// 		// continue
+	// 		panic(err)
+	// 	}
+	// 	conn.Write(slice)
+	// }
+	scanner := bufio.NewScanner(os.Stdin)
 	for {
+		var slice []byte = make([]byte, 1024)
 		fmt.Println("Entre ton message :")
-		_, err := fmt.Scanln(&slice)
-		if err != nil {
-			log.Print(err)
-			continue
+		for scanner.Scan() {
+			bytes := scanner.Bytes()
+			slice = bytes
+			break
 		}
 		conn.Write(slice)
 	}
@@ -68,10 +81,7 @@ func listenForMessages(conn net.Conn) {
 			return
 		}
 		stringMessage = string(sliceMessage[:n])
-		if strings.HasPrefix(stringMessage, "£WHO") {
-			log.Print(stringMessage[3:] + ": ")
-		} else if strings.HasPrefix(stringMessage, "£MSG") {
-			log.Println(stringMessage[3:])
-		}
+		splitedMessage := strings.Split(stringMessage, "\n")
+		log.Println(splitedMessage[0] + ": " + splitedMessage[1])
 	}
 }
