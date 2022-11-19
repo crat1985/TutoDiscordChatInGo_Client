@@ -25,7 +25,10 @@ func sendPseudo() {
 		fmt.Print("Pseudo : ")
 		var pseudo []byte
 		fmt.Scanln(&pseudo)
-		conn.Write(pseudo)
+		fmt.Print("Mot de passe : ")
+		var password []byte
+		fmt.Scanln(&password)
+		conn.Write([]byte(string(pseudo) + "\n" + string(password)))
 		n, err := conn.Read(response)
 		if err != nil {
 			log.Println(err)
