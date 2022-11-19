@@ -1,6 +1,6 @@
 {
-  "host": "90.125.35.111",
-  "port": "8888",
-  "pseudo": "",
-  "password": ""
+  "host": "localhost",
+  "port": "8080",
+  "pseudo": "admin",
+  "password": "password"
 }

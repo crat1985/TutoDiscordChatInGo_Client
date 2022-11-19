@@ -81,7 +81,24 @@ func sendPseudo() {
 			log.Println(string(response[:n]))
 			continue
 		}
+		for {
+			fmt.Print("Enregistrer cette connexion comme la connexion par défaut (o/n) ? ")
+			var response string
+			fmt.Scanln(&response)
+			response = strings.ToLower(response)
+			if response == "o" {
+				log.Println("Enregistrement en cours...")
+				err := utils.Encode(utils.Config{Host: address, Port: port, Pseudo: pseudo, Password: password})
+				if err != nil {
+					log.Print(err)
+					break
+				}
+				log.Println("Enregistrement effectué avec succès !")
+				break
+			}
+		}
 		log.Println("Bienvenue sur le chat !")
+		break
 	}
 }
 

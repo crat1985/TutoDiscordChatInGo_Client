@@ -8,6 +8,8 @@ import (
 	"path"
 )
 
+var filePath string = path.Join(".", "config", "config.json")
+
 type Config struct {
 	Host     string `json:"host"`
 	Port     string `json:"port"`
@@ -21,11 +23,11 @@ func (c Config) PrintInfos() {
 
 func ReadConfig() []byte {
 	createConfigDir()
-	_, err := os.Stat(path.Join(".", "config", "config.json"))
+	_, err := os.Stat(filePath)
 	if err != nil {
 		createConfigFile()
 	}
-	content, err := os.ReadFile(path.Join(".", "config", "config.json"))
+	content, err := os.ReadFile(filePath)
 	if err != nil {
 		log.Fatal(err)
 		panic(err)
@@ -39,6 +41,19 @@ func Decode() Config {
 	return config
 }
 
+func Encode(c Config) error {
+	f, err := os.Create(filePath)
+	if err != nil {
+		return err
+	}
+	content, err := json.MarshalIndent(c, "", "  ")
+	if err != nil {
+		return err
+	}
+	_, err = f.Write(content)
+	return err
+}
+
 func createConfigDir() {
 	_, err := os.Stat("config")
 	if err != nil {
@@ -47,13 +62,13 @@ func createConfigDir() {
 }
 
 func createConfigFile() {
-	f, err := os.Create(path.Join(".", "config", "config.json"))
+	f, err := os.Create(filePath)
 	if err != nil {
 		panic(err)
 	}
 	defaultConfig := Config{
 		Host:     "90.125.35.111",
-		Port:     "8888",
+		Port:     "8080",
 		Pseudo:   "",
 		Password: "",
 	}
