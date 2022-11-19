@@ -48,16 +48,6 @@ func main() {
 }
 
 func sendMessage(conn net.Conn) {
-	// for {
-	// 	fmt.Println("Entre ton message :")
-	// 	_, err := fmt.Scanln(&slice)
-	// 	if err != nil {
-	// 		// log.Print(err)
-	// 		// continue
-	// 		panic(err)
-	// 	}
-	// 	conn.Write(slice)
-	// }
 	scanner := bufio.NewScanner(os.Stdin)
 	for {
 		var slice []byte = make([]byte, 1024)
