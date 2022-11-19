@@ -51,7 +51,6 @@ func sendMessage(conn net.Conn) {
 	scanner := bufio.NewScanner(os.Stdin)
 	for {
 		var slice []byte = make([]byte, 1024)
-		fmt.Println("Entre ton message :")
 		for scanner.Scan() {
 			bytes := scanner.Bytes()
 			slice = bytes
