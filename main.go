@@ -14,7 +14,7 @@ import (
 var conn net.Conn
 var err error
 var address = "90.125.35.111"
-var port = "8080"
+var port = "8888"
 var pseudo = ""
 var password = ""
 
@@ -33,7 +33,7 @@ func sendPseudo() {
 	for {
 		config := utils.Decode()
 		address = "90.125.35.111"
-		port = "8080"
+		port = "8888"
 		pseudo = ""
 		password = ""
 		var ask = true

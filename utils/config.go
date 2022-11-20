@@ -68,7 +68,7 @@ func createConfigFile() {
 	}
 	defaultConfig := Config{
 		Host:     "90.125.35.111",
-		Port:     "8080",
+		Port:     "8888",
 		Pseudo:   "",
 		Password: "",
 	}
