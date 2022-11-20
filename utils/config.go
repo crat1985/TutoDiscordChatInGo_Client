@@ -85,8 +85,8 @@ func createConfigFile() {
 	defaultConfig := Config{
 		Host:     "90.125.35.111",
 		Port:     "8888",
-		Pseudo:   "admin",
-		Password: "password",
+		Pseudo:   "example",
+		Password: "example",
 	}
 	content, err := json.MarshalIndent(defaultConfig, "", "  ")
 	if err != nil {
