@@ -68,6 +68,37 @@ func validConfig() {
 	}
 }
 
+// Demande à l'utilisateur s'il veut enregistrer la connexion actuelle comme connexion par défaut
+func askIfSaveConnection() {
+	for {
+		fmt.Print("Enregistrer cette connexion comme la connexion par défaut (o/n) ? ")
+		var response string
+		fmt.Scanln(&response)
+		response = strings.ToLower(response)
+		if response == "o" {
+			log.Println("Enregistrement en cours...")
+			err := utils.Encode(utils.Config{Host: address, Port: port, Pseudo: pseudo, Password: password})
+			if err != nil {
+				log.Print(err)
+				break
+			}
+			log.Println("Enregistrement effectué avec succès !")
+			break
+		}
+		if response == "n" {
+			break
+		}
+	}
+}
+
+// Renvoie true si les deux configurations sont différentes
+func isConfigDifferent(config1, config2 utils.Config) bool {
+	if config1.Host != config2.Host || config1.Port != config2.Port || config1.Pseudo != config2.Pseudo || config1.Password != config2.Password {
+		return true
+	}
+	return false
+}
+
 // Envoie le pseudo renseigné au serveur et vérifie que la réponse du serveur est correcte
 func sendPseudo() {
 	for {
@@ -100,24 +131,8 @@ func sendPseudo() {
 			log.Println(string(response[:n]))
 			continue
 		}
-		for {
-			fmt.Print("Enregistrer cette connexion comme la connexion par défaut (o/n) ? ")
-			var response string
-			fmt.Scanln(&response)
-			response = strings.ToLower(response)
-			if response == "o" {
-				log.Println("Enregistrement en cours...")
-				err := utils.Encode(utils.Config{Host: address, Port: port, Pseudo: pseudo, Password: password})
-				if err != nil {
-					log.Print(err)
-					break
-				}
-				log.Println("Enregistrement effectué avec succès !")
-				break
-			}
-			if response == "n" {
-				break
-			}
+		if isConfigDifferent(config, utils.Config{Host: address, Port: port, Pseudo: pseudo, Password: password}) {
+			askIfSaveConnection()
 		}
 		log.Println("Bienvenue sur le chat !")
 		break
