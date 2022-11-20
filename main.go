@@ -46,6 +46,7 @@ func askInfos() {
 // Exécutée si la configuration est valide
 func validConfig() {
 	for {
+		ask = true
 		fmt.Print("Se connecter avec les infos enregistrées (o pour oui, n pour non et ? pour plus d'infos) ? ")
 		var response string
 		fmt.Scanln(&response)
@@ -167,11 +168,15 @@ func listenForMessages(conn net.Conn) {
 	for {
 		n, err := conn.Read(sliceMessage)
 		if err != nil {
-			log.Println("Lost connection to server !")
+			log.Println("Connexion au serveur perdue !")
 			return
 		}
 		stringMessage = string(sliceMessage[:n])
 		splitedMessage := strings.Split(stringMessage, "\n")
-		log.Println(splitedMessage[0] + ": " + splitedMessage[1])
+		if splitedMessage[0] == "serv" {
+			log.Println(splitedMessage[1])
+		} else {
+			log.Println(splitedMessage[0] + ": " + splitedMessage[1])
+		}
 	}
 }
