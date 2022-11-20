@@ -17,6 +17,8 @@ var address = "90.125.35.111"
 var port = "8888"
 var pseudo = ""
 var password = ""
+var ask = true
+var config utils.Config
 
 func askInfos() {
 	fmt.Print("Adresse du serveur : ")
@@ -29,36 +31,40 @@ func askInfos() {
 	fmt.Scanln(&password)
 }
 
+// Exécutée si la configuration est valide
+func validConfig() {
+	for {
+		fmt.Print("Se connecter avec les infos enregistrées (o pour oui, n pour non et ? pour plus d'infos) ? ")
+		var response string
+		fmt.Scanln(&response)
+		response = strings.ToLower(response)
+		if response == "o" {
+			address = config.Host
+			port = config.Port
+			pseudo = config.Pseudo
+			password = config.Password
+			ask = false
+			break
+		}
+		if response == "?" {
+			config.PrintInfos()
+			continue
+		}
+		if response == "n" {
+			break
+		}
+	}
+}
+
 func sendPseudo() {
 	for {
-		config := utils.Decode()
+		config = utils.Decode()
 		address = "90.125.35.111"
 		port = "8888"
 		pseudo = "admin"
 		password = "password"
-		var ask = true
 		if config.IsValid() {
-			for {
-				fmt.Print("Se connecter avec les infos enregistrées (o pour oui, n pour non et ? pour plus d'infos) ? ")
-				var response string
-				fmt.Scanln(&response)
-				response = strings.ToLower(response)
-				if response == "o" {
-					address = config.Host
-					port = config.Port
-					pseudo = config.Pseudo
-					password = config.Password
-					ask = false
-					break
-				}
-				if response == "?" {
-					config.PrintInfos()
-					continue
-				}
-				if response == "n" {
-					break
-				}
-			}
+			validConfig()
 		}
 		if ask {
 			askInfos()
