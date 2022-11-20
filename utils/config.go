@@ -21,6 +21,13 @@ func (c Config) PrintInfos() {
 	fmt.Printf("Adresse : %s\nPort : %s\nPseudo : %s\nMot de passe : %s\n", c.Host, c.Port, c.Pseudo, c.Password)
 }
 
+func (c Config) IsValid() bool {
+	if c.Host != "" && c.Port != "" && c.Pseudo != "" && c.Password != "" {
+		return true
+	}
+	return false
+}
+
 func ReadConfig() []byte {
 	createConfigDir()
 	_, err := os.Stat(filePath)
@@ -69,8 +76,8 @@ func createConfigFile() {
 	defaultConfig := Config{
 		Host:     "90.125.35.111",
 		Port:     "8888",
-		Pseudo:   "",
-		Password: "",
+		Pseudo:   "admin",
+		Password: "password",
 	}
 	content, err := json.MarshalIndent(defaultConfig, "", "  ")
 	if err != nil {

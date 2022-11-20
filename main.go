@@ -34,10 +34,10 @@ func sendPseudo() {
 		config := utils.Decode()
 		address = "90.125.35.111"
 		port = "8888"
-		pseudo = ""
-		password = ""
+		pseudo = "admin"
+		password = "password"
 		var ask = true
-		if config.Pseudo != "" {
+		if config.IsValid() {
 			for {
 				fmt.Print("Se connecter avec les infos enregistrées (o pour oui, n pour non et ? pour plus d'infos) ? ")
 				var response string
@@ -94,6 +94,9 @@ func sendPseudo() {
 					break
 				}
 				log.Println("Enregistrement effectué avec succès !")
+				break
+			}
+			if response == "n" {
 				break
 			}
 		}
