@@ -11,15 +11,27 @@ import (
 	"github.com/RIC217/TutoDiscordChatInGo_Client/utils"
 )
 
+// Connexion
 var conn net.Conn
 var err error
+
+// Adresse du serveur
 var address = "90.125.35.111"
+
+// Port du serveur
 var port = "8888"
+
+// Pseudo
 var pseudo = ""
+
+// Mot de passe
 var password = ""
 var ask = true
+
+// Structure de configuration
 var config utils.Config
 
+// Demande à l'utilisateur des informations par le biais de la fonction Scanln du package fmt
 func askInfos() {
 	fmt.Print("Adresse du serveur : ")
 	fmt.Scanln(&address)
@@ -56,6 +68,7 @@ func validConfig() {
 	}
 }
 
+// Envoie le pseudo renseigné au serveur et vérifie que la réponse du serveur est correcte
 func sendPseudo() {
 	for {
 		config = utils.Decode()
@@ -111,12 +124,14 @@ func sendPseudo() {
 	}
 }
 
+// Fonction principale
 func main() {
 	sendPseudo()
 	go sendMessage(conn)
 	listenForMessages(conn)
 }
 
+// Attend que l'utilisateur écrive un message dans la console puis l'envoie au serveur
 func sendMessage(conn net.Conn) {
 	scanner := bufio.NewScanner(os.Stdin)
 	for {
@@ -130,6 +145,7 @@ func sendMessage(conn net.Conn) {
 	}
 }
 
+// Ecoute les message envoyés par le serveur puis les affiche dans la console
 func listenForMessages(conn net.Conn) {
 	sliceMessage := make([]byte, 1024)
 	var stringMessage string

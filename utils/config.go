@@ -8,8 +8,10 @@ import (
 	"path"
 )
 
+// Chemin vers le fichier de configuration
 var filePath string = path.Join(".", "config", "config.json")
 
+// Structure de configuration
 type Config struct {
 	Host     string `json:"host"`
 	Port     string `json:"port"`
@@ -17,10 +19,12 @@ type Config struct {
 	Password string `json:"password"`
 }
 
+// Afficher les informations de configuration
 func (c Config) PrintInfos() {
 	fmt.Printf("Adresse : %s\nPort : %s\nPseudo : %s\nMot de passe : %s\n", c.Host, c.Port, c.Pseudo, c.Password)
 }
 
+// Renvoie vrai si la configuration est valide, faux sinon
 func (c Config) IsValid() bool {
 	if c.Host != "" && c.Port != "" && c.Pseudo != "" && c.Password != "" {
 		return true
@@ -28,6 +32,7 @@ func (c Config) IsValid() bool {
 	return false
 }
 
+// Lit le fichier de configuration et renvoie son contenu
 func ReadConfig() []byte {
 	createConfigDir()
 	_, err := os.Stat(filePath)
@@ -42,12 +47,14 @@ func ReadConfig() []byte {
 	return content
 }
 
+// Décode du texte sous forme JSON vers une structure de type Config
 func Decode() Config {
 	var config Config
 	json.Unmarshal(ReadConfig(), &config)
 	return config
 }
 
+// Encode une structure de type Config en JSON et écrit le résultat dans le fichier de configuration
 func Encode(c Config) error {
 	f, err := os.Create(filePath)
 	if err != nil {
@@ -61,6 +68,7 @@ func Encode(c Config) error {
 	return err
 }
 
+// Crée le dossier contenant le fichier de configuration
 func createConfigDir() {
 	_, err := os.Stat("config")
 	if err != nil {
@@ -68,6 +76,7 @@ func createConfigDir() {
 	}
 }
 
+// Crée le fichier de configuration avec les informations par défaut
 func createConfigFile() {
 	f, err := os.Create(filePath)
 	if err != nil {
