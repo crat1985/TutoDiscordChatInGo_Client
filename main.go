@@ -101,9 +101,13 @@ func isConfigDifferent(config1, config2 utils.Config) bool {
 }
 
 // Envoie le pseudo renseigné au serveur et vérifie que la réponse du serveur est correcte
-func sendPseudo() {
+func sendPseudo(isCustomConfig bool, customConfig utils.Config) {
 	for {
-		config = utils.Decode()
+		if !isCustomConfig {
+			config = utils.Decode()
+		} else {
+			config = customConfig
+		}
 		address = "90.125.35.111"
 		port = "8888"
 		pseudo = "admin"
@@ -142,7 +146,25 @@ func sendPseudo() {
 
 // Fonction principale
 func main() {
-	sendPseudo()
+	var isCustom bool
+	var customConfig utils.Config
+	if len(os.Args) > 1 {
+		var args []string = os.Args[1:]
+		if len(os.Args) > 2 {
+			args = os.Args[1:3]
+			if args[0] == "-config" || args[0] == "config" {
+				customConfig = utils.DecodeCustomConfig(args[1])
+				isCustom = true
+			}
+		}
+		if args[1] == "-h" || args[1] == "help" {
+			fmt.Println("Aide")
+			fmt.Println("Options :")
+			fmt.Println("-h ou help : afficher ce message d'aide")
+			return
+		}
+	}
+	sendPseudo(isCustom, customConfig)
 	go sendMessage(conn)
 	listenForMessages(conn)
 }

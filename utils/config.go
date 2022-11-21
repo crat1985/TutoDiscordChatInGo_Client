@@ -94,3 +94,21 @@ func createConfigFile() {
 	}
 	f.Write(content)
 }
+
+func ReadCustomConfig(path string) []byte {
+	_, err := os.Stat(path)
+	if err != nil {
+		log.Fatalln("Fichier " + path + " introuvable !")
+	}
+	content, err := os.ReadFile(path)
+	if err != nil {
+		panic(err)
+	}
+	return content
+}
+
+func DecodeCustomConfig(path string) Config {
+	var config Config
+	json.Unmarshal(ReadCustomConfig(path), &config)
+	return config
+}
