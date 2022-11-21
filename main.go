@@ -174,9 +174,9 @@ func listenForMessages(conn net.Conn) {
 		stringMessage = string(sliceMessage[:n])
 		splitedMessage := strings.Split(stringMessage, "\n")
 		if splitedMessage[0] == "serv" {
-			log.Println(splitedMessage[1])
+			fmt.Println(strings.Join(splitedMessage[1:], "\n"))
 		} else {
-			log.Println(splitedMessage[0] + ": " + splitedMessage[1])
+			log.Print(splitedMessage[0] + ": " + splitedMessage[1])
 		}
 	}
 }
